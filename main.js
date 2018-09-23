@@ -14,6 +14,24 @@ client.on("ready", function() {
     console.log('\n--- --- --- --- ---\n\nExpencial Discord Bot started !\nThe Discord Bot prefix is : exp!\nRun exp!help to get command list\nIn case of bug suspicion, run exp!ping\nThe Discord Bot logging channel is : #📂expbot-logs\nThe suggestions channel is : #💡suggestions\nThe bug report channel is : #📋rapport-bugs\nThe user report channel is : #🔥reports\nThe questions channel is : #❓questions\n\nHave a nice day !\n\n--- --- --- --- ---\n')
 })
 
+client.on('guildMemberAdd', member => {
+    member.addRole(member.guild.roles.find("name", "☄ >  En ligne ✋"))
+    var welcomeMember = member
+    var welcomeEmbed = new Discord.RichEmbed()
+    .setDescription(':inbox_tray:  ``Expencial - Lobby`` : Bienvenue à ' + welcomeMember + ' sur notre serveur !')
+    .setColor('#5bff8c')
+    member.guild.channels.find("name", "📥accueil").send(welcomeEmbed)
+})
+
+client.on('guildMemberRemove', member => {
+    var farewellMember = member
+    var farewellEmbed = new Discord.RichEmbed()
+    .setDescription(':outbox_tray:  ``Expencial - Lobby`` : Au revoir ' + farewellMember + ' !')
+    .setColor('#ff4e4e')
+    member.guild.channels.find("name", "📥accueil").send(farewellEmbed)
+})
+
+
 client.on("ready", function() {
     client.on('message', function(message) {
 
@@ -138,7 +156,7 @@ client.on("ready", function() {
                             var kickreason = stepsKick[stepID][1];
                             var kickEmbed;
                             if (kickArgs.match(/^(y(es)?|o(ui)?)$/gmi)) {
-                                kickmember.kick(kickreason)
+                                message.guild.member(kickmember).kick(kickreason);
                                 var kickEmbed = new Discord.RichEmbed()
                                 .setDescription(':ballot_box_with_check:  Succesfuly kicked ' + kickmember + ' for ' + kickreason + '.')
                             }
@@ -259,7 +277,13 @@ client.on("ready", function() {
             .setColor(color)
             message.channel.send(thanksEmbed)
             console.log('Running thanks command, asked by ' + authordiscrim + ' | ' + authorid)
-        }        
+        }
+        if (command === prefix + 'serverlist') {
+            var srvlist = new Discord.RichEmbed()
+            .setDescription(':newspaper:  Expencial Discord Bot are in these servers : \n\n' + client.guilds.map(r => `**${r.name}** | ${r.id}, **${r.memberCount}** members.`))
+            .setColor(color)
+            message.channel.send(srvlist)
+        }     
         if (command.startsWith(prefix + 'question')) {
             let question = args5.join(" ");
             if (!question) {
