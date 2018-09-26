@@ -49,15 +49,16 @@ client.on("ready", function() {
         var args4 = command.substring(prefix.length).split ("bug ");
         var args5 = command.substring(prefix.length).split ("question ")
         var args6 = command.substring(prefix.length).split ("poll ")
+        var args7 = command.substring(prefix.length).split ("changelog ")
 
         if (command === prefix + 'help') {
             var helpEmbed = new Discord.RichEmbed()
-            .addField('General commands :', prefix + 'help (Show this page). \n' + prefix + 'ping (Reveal the client ping). \n' + prefix + 'invite (Get a invite link) \n' + prefix + 'mcount (Tell how many people are here) \n ')
-            .addField('Moderation commands :', prefix + 'kick <*user*> [*reason*] (Kick a user) **IN-DEV**. \n' + prefix + 'ban <*user*> [*reason*] (Ban a user) **IN-DEV**. \n' + prefix + 'unban <*user*> (Unban a user) **IN-DEV**. \n' + prefix + 'mute <*user*> [*reason*] (Mute a user) **INDEV**. \n' + prefix + 'unmute <*user*> (Unmute a user) **IN-DEV**. \n' + prefix + 'clear <*amount*> (Clear the channel) \n' + prefix + 'warn <*user*> [*reason*] (Warn a user) **IN-DEV**. \n' + prefix + "checkwarn <*user*> (Check user's warns) **IN-DEV**. \n ")
-            .addField('Giveaway & polls commands :', prefix + 'giveaway {*channel*} <*title*> [*description*] (Create a giveaway) \n' + prefix + 'poll {*channel*} <*title*> [*question*] (Create a poll) \n ')
-            .addField('Tickets commands :', prefix + 'suggest [*description*] (Suggest whatever you want) \n ' + prefix + 'bug [*description*] (Report a bug) \n' + prefix + "report [*report desc*] (Report a user) \n" + prefix + 'question [*question*] (Ask something)')
-            .addField('Musical commands :', 'Any commands here \n ')
-            .addField('Fun & others commands :', prefix + 'say [*message*] (Let bot speak for you) \n' + prefix + 'thanks (A special message for people help create this bot)')
+            .addField(':briefcase: | General commands :', prefix + 'help (Show this page). \n' + prefix + 'ping (Reveal the client ping). \n' + prefix + 'invite (Get a invite link) \n' + prefix + 'mcount (Tell how many people are here) \n ')
+            .addField(':shield: | Moderation commands :', prefix + 'kick <*user*> [*reason*] (Kick a user) **IN-DEV**. \n' + prefix + 'ban <*user*> [*reason*] (Ban a user) **IN-DEV**. \n' + prefix + 'unban <*user*> (Unban a user) **IN-DEV**. \n' + prefix + 'mute <*user*> [*reason*] (Mute a user) **INDEV**. \n' + prefix + 'unmute <*user*> (Unmute a user) **IN-DEV**. \n' + prefix + 'clear <*amount*> (Clear the channel) \n' + prefix + 'warn <*user*> [*reason*] (Warn a user) **IN-DEV**. \n' + prefix + "checkwarn <*user*> (Check user's warns) **IN-DEV**. \n ")
+            .addField(':tada: | Giveaway & polls commands :', prefix + 'giveaway {*channel*} <*title*> [*description*] (Create a giveaway) \n' + prefix + 'poll {*channel*} <*title*> [*question*] (Create a poll) \n ')
+            .addField(':tickets: | Tickets commands :', prefix + 'suggest [*description*] (Suggest whatever you want) \n ' + prefix + 'bug [*description*] (Report a bug) \n' + prefix + "report [*report desc*] (Report a user) \n" + prefix + 'question [*question*] (Ask something) \n' + prefix + "changelog [*logmsg*] (Add a note to changelog)")
+            .addField(':notes: | Musical commands :', 'Any commands here \n ')
+            .addField(':speech_left: | Fun & others commands :', prefix + 'say [*message*] (Let bot speak for you) \n' + prefix + 'avatar (Get your profile picture) \n' + prefix + 'thanks (A special message for people help create this bot)')
             .setColor(color)
             message.channel.send(helpEmbed)
             console.log('\n--- --- --- --- ---\nCommand run : exp!help\nRun by : ' + authordiscrim + ' | ' + authorid + '\n--- --- --- --- ---')
@@ -72,6 +73,7 @@ client.on("ready", function() {
             .setDescription(':ping_pong:  ' + Math.round(client.ping) + ' ms.')
             .setColor(color)
             console.log('\n--- --- --- --- ---\nCommand run : exp!ping\nRun by : ' + authordiscrim + ' | ' + authorid + '\n"ping" value : ' + client.ping + ' ms\n--- --- --- --- ---')
+            message.delete()
             message.channel.send(pingEmbed)
             var authlog = message.author.tag
             var logEmbed = new Discord.RichEmbed()
@@ -83,6 +85,7 @@ client.on("ready", function() {
             var inviteEmbed = new Discord.RichEmbed()
             .setTitle(':link:  ' + invitelink)
             .setColor(color)
+            message.delete()
             message.channel.send(inviteEmbed)
             console.log('Running invite command, asked by ' + authordiscrim + ' | ' + authorid)
             var authlog = message.author.tag
@@ -95,6 +98,7 @@ client.on("ready", function() {
             var membercountEmbed = new Discord.RichEmbed()
             .setDescription(':busts_in_silhouette:  ' + membercount + ' members.')
             .setColor(color)
+            message.delete()
             message.channel.send(membercountEmbed)
             console.log('\n--- --- --- --- ---\nCommand run : exp!mcount\nRun by : ' + authordiscrim + ' | ' + authorid + '\n"membercount" value : ' + membercount + '\n--- --- --- --- ---')
             var authlog = message.author.tag
@@ -107,6 +111,7 @@ client.on("ready", function() {
             var twitterEmbed = new Discord.RichEmbed()
             .setTitle(':bird:  ' + twitter)
             .setColor(color)
+            message.delete()
             message.channel.send(twitterEmbed)
             console.log('\n--- --- --- --- ---\nCommand run : exp!twitter\nRun by : ' + authordiscrim + ' | ' + authorid + '\n--- --- --- --- ---')
             var authlog = message.author.tag
@@ -114,6 +119,14 @@ client.on("ready", function() {
             .addField('Twitter run by : ', authlog)
             .setColor(color)
             message.guild.channels.find("name", logchann).send(logEmbed)
+        }
+        if (command === prefix + 'avatar') {
+            var avatarEmbed = new Discord.RichEmbed()
+            .setTitle('Here is your profile picture :')
+            .setImage(message.author.avatarURL)
+            .setColor(color)
+            message.delete()
+            message.channel.send(avatarEmbed)
         }
         if (command2 === prefix + 'kick') {
             if (!message.member.hasPermission("KICK_MEMBERS")) {
@@ -224,6 +237,26 @@ client.on("ready", function() {
                 .setColor(color)
                 message.channel.send(sayEmbed)
                 console.log(authordiscrim + ' | ' + authorid + ' tried to use say command, but MANAGE_MESSAGES permission is missing.')
+            }
+        }
+        if (command.startsWith(prefix + 'changelog')) {
+            if (message.member.hasPermission("ADMINISTRATOR")) {
+                let clogmessage = args7.join(" ");
+                var clogEmbed = new Discord.RichEmbed()
+                .setDescription(':newspaper:  ' + clogmessage)
+                .setColor(color)
+                message.delete()
+                message.guild.channels.find("name", "📂changelog").send(clogEmbed)
+                
+                console.log('[EXPBOT] [CMD] : changelog_command (clogmessage = ' + clogmessage + ' )')
+            }
+            else if (!message.member.hasPermission("ADMINISTRATOR")) {
+                var clogEmbed = new Discord.RichEmbed()
+                .setDescription(":bangbang:  You don't have a Administrator role.")
+                .setColor(color)
+                message.delete()
+                message.channel.send(clogEmbed);
+                console.log('[EXPBOT] [CMD] : // FAILED // changelog_command (user missing permission)')
             }
         }
         if (command.startsWith(prefix + 'suggest')) {
