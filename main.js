@@ -1,36 +1,79 @@
 const Discord = require('discord.js')
 const prefix = ('exp!')
 var twitter = ('https://twitter.com/expencialmc')
-var invitelink = ('https://discord.gg/Nyn8yDd')
-var color = ('#FF653C')
+var invitelink = ('https://discord.gg/Jxrfjmj')
+var color = ('#7289da')
+var footer = ('Expencial Discord Bot')
 const client = new Discord.Client()
 var stepsKick = {};
-var startbot = (0)
+console.log('-> var_defined')
+
+client.on("ready", function() { // ! Démarage du bot
+    client.user.setActivity("Expencial 🔥 | Faites " + prefix + 'help')
+    client.user.setUsername("Expencia 🔥")
+    client.user.setStatus('dnd')
+    console.log('-> bot_started')
+})
+
+client.login(process.env.KEY);
 
 client.on("ready", function() {
-    client.user.setActivity("Expencial 🔥 ! Do exp!help !")
-    client.user.setUsername("Expencial 🔥")
-    client.user.setStatus('dnd')
-    console.log('\n--- --- --- --- ---\n\nExpencial Discord Bot started !\nThe Discord Bot prefix is : exp!\nRun exp!help to get command list\nIn case of bug suspicion, run exp!ping\nThe Discord Bot logging channel is : #📂expbot-logs\nThe suggestions channel is : #💡suggestions\nThe bug report channel is : #📋rapport-bugs\nThe user report channel is : #🔥reports\nThe questions channel is : #❓questions\n\nHave a nice day !\n\n--- --- --- --- ---\n')
+
+    var startEmbed = new Discord.RichEmbed()
+    .setTitle('☄ | Expencial - Bot', 'Le bot Discord a bien démarré !')
+    .setDescription('Le bot Discord a bien démarré, il est actuellent hébergé sur Heroku.')
+    .setColor(color)
+    .setTimestamp()
+    .setFooter(footer)
+    client.guilds.get('328240263703166995').channels.get('485765540216832015').send(startEmbed);
+    console.log('-> bot_started message send')
 })
 
 client.on('guildMemberAdd', member => { // ! Message de bienvenue
     member.addRole(member.guild.roles.find("name", "☄ >  En ligne ✋"))
     var welcomeMember = member
     var welcomeEmbed = new Discord.RichEmbed()
-    .setDescription(':inbox_tray:  ``Expencial - Lobby`` : Bienvenue à ' + welcomeMember + ' sur notre serveur !')
+    .setTitle('☄ | Expencial - Lobby : ')
+    .setDescription(':inbox_tray:  |  Bienvenue, ' + welcomeMember + ' !')
     .setColor('#5bff8c')
+    .setFooter(footer)
+    .setTimestamp()
     member.guild.channels.find("name", "📥accueil").send(welcomeEmbed)
     console.log('-> member_joined')
+    // * LOG_JOIN
+    var logchann = ('📂expbot-logs')
+    var logEmbed = new Discord.RichEmbed()
+    .setTitle('☄ | Expencial - Bot')
+    .addField('Nouveau membre :', welcomeMember, true)
+    .addField('Identifiant (ID) :', welcomeMember.id, true)
+    .setColor('#5bff8c')
+    .setTimestamp()
+    .setFooter(footer)
+    .setThumbnail(welcomeMember.avatarURL)
+    member.guild.channels.find("name", logchann).send(logEmbed)
 })
 
 client.on('guildMemberRemove', member => { // ! Message d'aurevoir
     var farewellMember = member
     var farewellEmbed = new Discord.RichEmbed()
-    .setDescription(':outbox_tray:  ``Expencial - Lobby`` : Au revoir ' + farewellMember + ' !')
+    .setTitle('☄ | Expencial - Lobby : ')
+    .setDescription(':outbox_tray:  |  Au revoir ' + farewellMember + ' !')
     .setColor('#ff4e4e')
+    .setFooter(footer)
+    .setTimestamp()
     member.guild.channels.find("name", "📥accueil").send(farewellEmbed)
     console.log('-> member_left')
+    // * LOG_LEFT
+    var logchann = ('📂expbot-logs')
+    var logEmbed = new Discord.RichEmbed()
+    .setTitle('☄ | Expencial - Bot')
+    .addField('Membre parti/kick :', farewellMember, true)
+    .addField('Identifiant (ID) :', farewellMember.id, true)
+    .setColor('#ff4e4e')
+    .setTimestamp()
+    .setFooter(footer)
+    .setThumbnail(farewellMember.avatarURL)
+    member.guild.channels.find("name", logchann).send(logEmbed)
 })
 
 
@@ -45,7 +88,6 @@ client.on("ready", function() {
         var authorid = message.author.id
         var kickmember = message.mentions.users.first()
         var guild = message.guild
-        var membercount = guild.memberCount
         var logchann = ('📂expbot-logs')
 
         // ! Définition des variables "arguments"
@@ -65,119 +107,266 @@ client.on("ready", function() {
 
         if (command === prefix + 'help') { // ! Command HELP //
             var helpEmbed = new Discord.RichEmbed()
-            .addField(':briefcase: | Commandes de base :', prefix + 'help (Affiche cette liste). \n' + prefix + 'ping (Vérifiez la latence du bot). \n' + prefix + "invite (Obtenez un lien d'invitation) \n" + prefix + 'mcount (Indique le total de membres ici) \n' + prefix + "calc [*calcul*] (Effectuer des calculs) **BIENTÔT** \n" + prefix + "userinfo <*utilisateur*> (Informations de base sur un utilisateur)")
-            .addField(':shield: | Commandes de modération :', prefix + 'kick <*user*> [*raison*] (Expulser un utilisateur) **BIENTÔT**. \n' + prefix + 'ban <*utilisateur*> [*raison*] (Bannir un utiliateur) **BIENTÔT**. \n' + prefix + 'unban <*identifiant*> (Débannir un identifiant). \n' + prefix + 'mute <*utilisateur*> [*raison*] (Mute un utilisateur) **BIENTÔT**. \n' + prefix + 'unmute <*utilisateur*> (Unmute un utilisateur) **BIENTÔT**. \n' + prefix + 'clear <*montant*> (Nettoie le salon) \n' + prefix + 'warn <*utilisateur*> [*raison*] (Avertir un utilisateur) **BIENTÔT**. \n' + prefix + "checkwarn <*utilisateur*> (Vérifier un casier) **BIENTÔT**. \n ")
-            .addField(":tada: | Commandes d'évenements :", prefix + 'giveaway {*salon*} <*titre*> [*description*] (Créer un concours) \n' + prefix + 'poll {*salon*} <*titre*> [*question*] (Créer un sondage) \n ')
-            .addField(':tickets: | Commandes de rapports :', prefix + 'suggest [*description*] (Suggérez un ajout) \n ' + prefix + 'bug [*description*] (Rapportez un bug) \n' + prefix + "report [*report*] (Rapportez un utilisateur) \n" + prefix + 'question [*question*] (Posez votre question) \n' + prefix + "changelog [*description*] (Ajoutez une note de mise à jour) \n" + prefix + "enigma [*énigme*] (Soumettez votre énigme)")
-            .addField(':notes: | Commandes musicales :', 'Aucune commandes ici... \n ')
-            .addField(':speech_left: | Commandes diverses :', prefix + 'say [*message*] (Faites parler le bot) \n' + prefix + 'avatar (Obtenez votre photo de profil) \n' + prefix + 'thanks (Message de remerciement pour les créateurs)')
+            .setTitle('☄ | Liste des commandes du bot Discord ExpencialBot :')
+            .addField(':briefcase: | Commandes de base :', prefix + 'help (Affiche cette liste). \n' + prefix + 'ping (Vérifiez la latence du bot). \n' + prefix + "invite (Obtenez un lien d'invitation) \n" + prefix + 'mcount (Indique le total de membres ici) \n' + prefix + "calc [*calcul*] (Effectuer des calculs) **BIENTÔT** \n" + prefix + "userinfo <*utilisateur*> (Informations de base sur un utilisateur)", true)
+            .addField(':shield: | Commandes de modération :', prefix + 'kick <*user*> [*raison*] (Expulser un utilisateur) **BIENTÔT**. \n' + prefix + 'ban <*utilisateur*> [*raison*] (Bannir un utiliateur) **BIENTÔT**. \n' + prefix + 'unban <*identifiant*> (Débannir un identifiant). \n' + prefix + 'mute <*utilisateur*> [*raison*] (Mute un utilisateur) **BIENTÔT**. \n' + prefix + 'unmute <*utilisateur*> (Unmute un utilisateur) **BIENTÔT**. \n' + prefix + "clear <*montant*> (Nettoie le salon) " + prefix + "lockdown (Verrouille un salon) \n" + prefix + 'unlock (Déverrouille un salon)\n', true)
+            .addField(":tada: | Commandes d'évenements :", prefix + 'giveaway {*salon*} <*titre*> [*description*] (Créer un concours) \n' + prefix + 'poll {*salon*} <*titre*> [*question*] (Créer un sondage) \n ', true)
+            .addField(':tickets: | Commandes de rapports :', prefix + 'suggest [*description*] (Suggérez un ajout) \n ' + prefix + 'bug [*description*] (Rapportez un bug) \n' + prefix + "report [*report*] (Rapportez un utilisateur) \n" + prefix + 'question [*question*] (Posez votre question) \n' + prefix + "changelog [*description*] (Ajoutez une note de mise à jour) \n" + prefix + "enigma [*énigme*] (Soumettez votre énigme)", true)
+            .addField(':notes: | Commandes musicales :', 'Aucune commandes ici... \n ', true)
+            .addField(':speech_left: | Commandes diverses :', prefix + 'say [*message*] (Faites parler le bot) \n' + prefix + 'avatar (Obtenez votre photo de profil) \n' + prefix + 'thanks (Message de remerciement pour les créateurs)', true)
             .setColor(color)
+            .setFooter(footer)
+            .setTimestamp()
+            message.delete()
             message.channel.send(helpEmbed)
             console.log('-> help_command')
+            // * LOG_HELP
             var authlog = message.author.tag
             var logEmbed = new Discord.RichEmbed()
-            .addField('Help run by : ', authlog)
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'help', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
             .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
             message.guild.channels.find("name", logchann).send(logEmbed)
         }
         if (command === prefix + 'ping') { // ! Command PING //
             var pingEmbed = new Discord.RichEmbed()
-            .setDescription(':ping_pong:  |  ' + Math.round(client.ping) + ' ms.')
+            .addField('☄ | Latence du bot : ', ':ping_pong:  |  ' + Math.round(client.ping) + ' ms.')
+            .setTimestamp()
+            .setThumbnail(client.avatarURL)
             .setColor(color)
             console.log('-> ping_command (ping = ' + Math.round(client.ping) + ' )')
             message.delete()
             message.channel.send(pingEmbed)
-            var authlog = message.author.tag
+            // * LOG_PING
             var logEmbed = new Discord.RichEmbed()
-            .addField('Ping run by : ', authlog)
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'ping', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .addField('Valeur "ping" :', Math.round(client.ping) + 'ms', true)
             .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
             message.guild.channels.find("name", logchann).send(logEmbed)
         }
         if (command === prefix + 'calc') { // ! Command CALC //
             var calcEmbed = new Discord.RichEmbed()
-            .setDescription(':clock1:  |  Bientôt !')
+            .addField('☄ | Calculatrice :', ':clock1:  |  Bientôt !')
             .setColor(color)
+            .setFooter(footer)
+            .setTimestamp()
+            message.delete()
             message.channel.send(calcEmbed)
             console.log('-> calc_command (calc = undefined )')
+            // * LOG_CALC
+            var logEmbed = new Discord.RichEmbed()
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'calc', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
+            message.guild.channels.find("name", logchann).send(logEmbed)
         }
         if (command === prefix + 'invite') { // ! Command INVITE //
             var inviteEmbed = new Discord.RichEmbed()
-            .setTitle(':link:  |  ' + invitelink)
+            .setTitle("☄ | Lien d'invitation :")
+            .setDescription(':link:  |  ' + invitelink)
             .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
             message.delete()
             message.channel.send(inviteEmbed)
             console.log('-> invite_command')
-            var authlog = message.author.tag
+            // * LOG_INVITE
             var logEmbed = new Discord.RichEmbed()
-            .addField('Invite run by : ', authlog)
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'invite', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .addField('Valeur "invite" : ', invitelink)
             .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
             message.guild.channels.find("name", logchann).send(logEmbed)
         }
         if (command === prefix + 'mcount') { // ! Command MEMBER_COUNT //
+            var membercount = guild.memberCount
             var membercountEmbed = new Discord.RichEmbed()
+            .setTitle("☄ | Compteur de membres :")
             .setDescription(':busts_in_silhouette:  |  ' + membercount + ' membres.')
             .setColor(color)
+            .setFooter(footer)
+            .setTimestamp()
             message.delete()
             message.channel.send(membercountEmbed)
             console.log('-> mcount_command (mcount = ' + membercount + ' members)')
-            var authlog = message.author.tag
+            // * LOG_MCOUNT
             var logEmbed = new Discord.RichEmbed()
-            .setDescription('Mcount run by : ' + authlog)
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'mcount', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .addField('Valeur "membercount" : ', membercount)
             .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
             message.guild.channels.find("name", logchann).send(logEmbed)
         }
         if (command === prefix + 'twitter') { // ! Command TWITTER //
             var twitterEmbed = new Discord.RichEmbed()
-            .setTitle(':bird:  |  ' + twitter)
+            .setTitle('☄ | Twitter : ')
+            .setDescription(':bird:  |  ' + twitter)
             .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
             message.delete()
             message.channel.send(twitterEmbed)
             console.log('-> twitter_command')
-            var authlog = message.author.tag
+            // * LOG_TWITTER
             var logEmbed = new Discord.RichEmbed()
-            .addField('Twitter run by : ', authlog)
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'twitter', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .addField('Valeur "twitter" : ', twitter)
             .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
+            .setThumbnail(client.avatarURL)
             message.guild.channels.find("name", logchann).send(logEmbed)
         }
-        if (command === prefix + 'avatar') { // ! Command AVATAR //
+        if (command.startsWith(prefix + 'avatar')) { // ! Command AVATAR //
+            var user = message.mentions.users.first();
             var avatarEmbed = new Discord.RichEmbed()
-            .setTitle(':frame_with_picture:  |  Voici votre photo de profil :')
-            .setImage(message.author.avatarURL)
+            .setTitle('☄ | Photos de profil :')
+            .setImage(':frame_with_picture:  |  Photo de profil de ' + user.username + ' :', user.avatarURL)
             .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
             message.delete()
             message.channel.send(avatarEmbed)
+            console.log('-> avatar_command')
+            // * LOG_AVATAR
+            var logEmbed = new Discord.RichEmbed()
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'avatar', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .addField('Cible :', user.tag, true)
+            .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
+            .setThumbnail(client.avatarURL)
+            message.guild.channels.find("name", logchann).send(logEmbed)
         }
         if (command === prefix + 'thanks') { // ! Command THANKS //
             var thanksEmbed = new Discord.RichEmbed()
+            .setTitle('☄ | Remerciements : ')
             .setDescription(':heart:  |  Merci à @.Wright#8036, @ElTHumeau#9544, @Japanes#8646 et à @LordMorgoth#0875 pour avoir participé au développement de ce bot Discord qui sans eux ne serait rien :heart: !')
             .setColor(color)
+            .setFooter(footer)
+            .setTimestamp()
             message.channel.send(thanksEmbed)
-            console.log('Running thanks command, asked by ' + authordiscrim + ' | ' + authorid)
+            console.log('-> thanks_command')
+            // * LOG_THANKS
+            var logEmbed = new Discord.RichEmbed()
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'thanks', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
+            .setThumbnail(client.avatarURL)
+            message.guild.channels.find("name", logchann).send(logEmbed)
         }
         if (command === prefix + 'serverlist') { // ! Command LIST_SERVERS //
             var srvlist = new Discord.RichEmbed()
+            .setTitle('☄ | Liste des serveurs')
             .setDescription(':newspaper:  |  Expencial Discord Bot se trouve sur ces serveurs : \n\n' + client.guilds.map(r => `**${r.name}** | ${r.id}, avec **${r.memberCount}** membres.`) + "\n")
             .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
             message.channel.send(srvlist)
+            console.log('-> serverlist_command')
+            // * LOG_SERVERLIST
+            var logEmbed = new Discord.RichEmbed()
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'serverlist', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
+            .setThumbnail(client.avatarURL)
+            message.guild.channels.find("name", logchann).send(logEmbed)
         }
         if (command.startsWith(prefix + "userinfo")) {
             var user = message.mentions.users.first();
+            var userCreateDate = user.createdAt.toString().split(" ");
             var userEmbed = new Discord.RichEmbed()
-            .setTitle(":page_with_curl:  |  Informations à propos de " + user.tag) // ! ok
-            .addField(":id: Identifiant : ", user.id) // ! ok
-            .addField(":hash: Discriminateur / Tag : ", "#" + user.discriminator) // ! ok
-            .addField(":traffic_light: Statut : ", user.status) // ? pas ok
-            .addField(":video_game: Activité : ", user.presence) // ? pas ok
-            .addField(":new: Compte créé le :", user.createdAt) // ! ok
-            .addField(":star: Discord Nitro :", user.premium) // ? pas ok
-            .addField(":ballot_box_with_check: Compte vérifié : ", user.verified) // ? pas ok
-            .addField(":inbox_tray: A rejoint le serveur le : ") // ? pas ok
-            .addField(":speech_left: Dernier message posté : ", user.lastMessage + " | ID : " + user.lastMessageID) // ! ok
-            .addField(":wrench: Permissions :") // ? pas ok
+            .setTitle("☄ | Informations à propos de " + user.tag) // ! ok
+            .addField(":id: Identifiant : ", user.id, true) // ! ok
+            .addField(":hash: Discriminateur / Tag : ", "#" + user.discriminator, true) // ! ok
+            .addField(":traffic_light: Statut : ", user.presence.status, true) // ! ok
+            .addField(":video_game: Activité : ", user.presence.game, true) // ! ok
+            .addField(":new: Compte créé le :", userCreateDate[2] + '/' + userCreateDate[1] + '/' + userCreateDate[3] + 'à' + userCreateDate[4], true) // ! ok
+            .addField(":inbox_tray: A rejoint le serveur le : ", 'undefined', true) // ? pas ok
+            .addField(":star: Discord Nitro :", user.premium, true) // ? pas ok
+            .addField(":ballot_box_with_check: Compte / e-mail vérifié : ", user.verified, true) // ? pas ok
+            .addField(":speech_left: Dernier message posté : ", user.lastMessage, true) // ! ok
+            .addField(":wrench: Permissions :", user.permissions, true) // ? pas ok
+            .addField(":lock_with_ink_pen: Rôles : ", user.roles, true) // ? pas ok
             .setColor(color) // ! ok
             .setThumbnail(user.avatarURL) // ! ok
+            .setTimestamp()
+            .setFooter(footer)
             message.delete() // ! ok
             message.channel.send(userEmbed) // ! ok
+            console.log('-> userinfo_command')
+            // * LOG_USERINFO
+            var logEmbed = new Discord.RichEmbed()
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'userinfo', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Cible : ', user.tag + ' (ID : ' + user.id + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
+            .setThumbnail(client.avatarURL)
+            message.guild.channels.find("name", logchann).send(logEmbed)
+        }
+        if (command === prefix + 'botinfo') {
+            var binfoEmbed = new Discord.RichEmbed()
+            .setTitle('☄ | Informations à propos du bot Discord :')
+            .addField('Créé par :', '@.Rentarô#8036', true)
+            .addField('Créé le :', '27 Août 2018 à 18 h 52 m 46s', true)
+            .addField('Développé par :', "@.Rentarô#8036, @ElTHumeau#1568, @LordMorgoth#0875 et @Gio'#8646", true)
+            .addField('Hébergé sur : ', "heroku.com", true)
+            .addField('Développé en :', 'JavaScript, discord.js, node.js', true)
+            .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
+            message.channel.send(binfoEmbed)
+            console.log('-> botinfo_command')
+            // * LOG_BOTINFO
+            var logEmbed = new Discord.RichEmbed()
+            .setTitle('☄ | Expencial - Bot')
+            .addField('Commande :', prefix + 'botinfo', true)
+            .addField('Éxécutée par :', authordiscrim + ' (ID : ' + authorid + ')', true)
+            .addField('Éxécutée dans : ', message.channel, true)
+            .setColor(color)
+            .setTimestamp()
+            .setFooter(footer)
+            .setThumbnail(client.avatarURL)
+            message.guild.channels.find("name", logchann).send(logEmbed)
         }
 
                 // ? MODERATION COMMANDS ? //
@@ -293,7 +482,181 @@ client.on("ready", function() {
             .setColor(color)
             message.channel.send(checkwarnEmbed)
         }
-        if(command.startsWith(prefix + "clear")) { // ! Command CLEAR //
+        if (command.startsWith(prefix + "lockdown")) { // ! Command LOCKDOWN //
+            if (!message.member.permissions.has("MANAGE_MESSAGES")) {
+                var lockdEmbed = new Discord.RichEmbed()
+                .setTitle('☄ | Verrouillage :')
+                .setDescription(':bangbang:  |  Permissions ``MANAGE_MESSAGES`` manquante')
+                .setColor(color)
+                .setTimestamp()
+                .setFooter(footer)
+                message.delete()
+                message.channel.send(lockdEmbed)
+                // * LOG_LOCKDOWN_FAILED
+                var logEmbed = new Discord.RichEmbed()
+                .setTitle('☄ | Expencial - Bot')
+                .addField('Commande :', prefix + 'lockdown', true)
+                .addField('Éxécutée par : ', authordiscrim + ' (ID : ' + authorid + ')', true)
+                .addField('Éxécutée dans : ', message.channel, true)
+                .addField('Erreur : ', "Permission ``MANAGE_MESSAGES`` manquante")
+                .setColor(color)
+                .setTimestamp()
+                .setFooter(footer)
+                message.guild.channels.find("name", logchann).send(logEmbed)
+            }
+            else {
+                message.channel.overwritePermissions('485557805118390283', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('332560455006552074 ', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('332885104634363904', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('328241813980708874', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('328241917039083520', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('493304782274953227', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('494564500553465869', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('472870954448453642', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('500563824525574154', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('376668872339750914', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                message.channel.overwritePermissions('328241471553798154', {
+                    SEND_MESSAGES: false,
+                    ADD_REACTIONS: false
+                })
+                var lockdEmbed = new Discord.RichEmbed()
+                .setTitle('☄ | Verrouillage :')
+                .setDescription(':lock:  |  Le salon ' + message.channel + ' a bien été verouillé !')
+                .setColor(color)
+                .setTimestamp()
+                .setFooter(footer)
+                message.delete()
+                message.channel.send(lockdEmbed)
+                // * LOG_LOCKDOWN
+                var logEmbed = new Discord.RichEmbed()
+                .setTitle('☄ | Expencial - Bot')
+                .addField('Commande :', prefix + 'lockdown', true)
+                .addField('Administrateur : ', authordiscrim + ' (ID : ' + authorid + ')', true)
+                .addField('Salon verrouillé : ', message.channel, true)
+                .setColor(color)
+                .setTimestamp()
+                .setFooter(footer)
+                message.guild.channels.find("name", logchann).send(logEmbed)
+            }
+        }
+        if (command.startsWith(prefix + 'unlock')) {
+            if (!message.member.permissions.has("MANAGE_MESSAGES")) {
+                var lockdEmbed = new Discord.RichEmbed()
+                .setTitle('☄ | Déverrouillage :')
+                .setDescription(':bangbang:  |  Permissions ``MANAGE_MESSAGES`` manquante')
+                .setColor(color)
+                .setTimestamp()
+                .setFooter(footer)
+                message.delete()
+                message.channel.send(lockdEmbed)
+                // * LOG_UNLOCK_FAILED
+                var logEmbed = new Discord.RichEmbed()
+                .setTitle('☄ | Expencial - Bot')
+                .addField('Commande :', prefix + 'unlock', true)
+                .addField('Éxécutée par : ', authordiscrim + ' (ID : ' + authorid + ')', true)
+                .addField('Éxécutée dans : ', message.channel, true)
+                .addField('Erreur : ', "Permission ``MANAGE_MESSAGES`` manquante")
+                .setColor(color)
+                .setTimestamp()
+                .setFooter(footer)
+                message.guild.channels.find("name", logchann).send(logEmbed)
+            }
+            else {
+                message.channel.overwritePermissions('485557805118390283', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('332560455006552074 ', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('332885104634363904', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('328241813980708874', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('328241917039083520', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('493304782274953227', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('494564500553465869', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('472870954448453642', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('500563824525574154', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('376668872339750914', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                message.channel.overwritePermissions('328241471553798154', {
+                    SEND_MESSAGES: true,
+                    ADD_REACTIONS: true
+                })
+                var lockdEmbed = new Discord.RichEmbed()
+                .setTitle('☄ | Déverrouillage :')
+                .setDescription(':lock:  |  Le salon ' + message.channel + ' a bien été déverouillé !')
+                .setColor(color)
+                .setTimestamp()
+                .setFooter(footer)
+                message.delete()
+                message.channel.send(lockdEmbed)
+                // * LOG_UNLOCK
+                var logEmbed = new Discord.RichEmbed()
+                .setTitle('☄ | Expencial - Bot')
+                .addField('Commande :', prefix + 'unlock', true)
+                .addField('Administrateur : ', authordiscrim + ' (ID : ' + authorid + ')', true)
+                .addField('Salon déverrouillé : ', message.channel, true)
+                .setColor(color)
+                .setTimestamp()
+                .setFooter(footer)
+                message.guild.channels.find("name", logchann).send(logEmbed)
+            }
+        }
+        if (command.startsWith(prefix + "clear")) { // ! Command CLEAR //
             if (!message.member.permissions.has('MANAGE_MESSAGES')) {
                    var ClearEmbed = new Discord.RichEmbed()
                    .setDescription(':bangbang:  |  Missing "MANAGE_MESSAGES" permission.')
@@ -439,8 +802,9 @@ client.on("ready", function() {
                 })
                 console.log('Running poll command, asked by ' + authordiscrim + ' | ' + authorid + ' (With arg :' + poll + ')')
             }
+            else if (command.startsWith(prefix)) {
+                message.channel.send("Commande inconnue.")
+            }
         }
     })
 });
-
-client.login(process.env.LOGINKEY)
