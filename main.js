@@ -15,7 +15,7 @@ client.on("ready", function() { // ! Démarage du bot
     console.log('-> bot_started')
 })
 
-client.login(process.env.KEY);
+client.login(process.env.LOGINKEY);
 
 client.on("ready", function() {
 
