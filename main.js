@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const prefix = ('exp!')
 var twitter = ('https://twitter.com/expencialmc')
 var invitelink = ('https://discord.gg/Jxrfjmj')
-var color = ('#7289da')
+var color = ('#ff653c')
 var footer = ('Expencial Discord Bot')
 const client = new Discord.Client()
 var stepsKick = {};
@@ -10,7 +10,7 @@ console.log('-> var_defined')
 
 client.on("ready", function() { // ! Démarage du bot
     client.user.setActivity("Expencial 🔥 | Faites " + prefix + 'help')
-    client.user.setUsername("Expencia 🔥")
+    client.user.setUsername("Expencial 🔥")
     client.user.setStatus('dnd')
     console.log('-> bot_started')
 })
